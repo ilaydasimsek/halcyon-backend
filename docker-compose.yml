@@ -1,0 +1,48 @@
+version: '3.6'
+
+networks:
+  halcyon-internal:
+  halcyon-external:
+    name: halcyon-external
+    external: true
+
+volumes:
+  dbdata:
+
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: halcyon
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - dbdata:/var/lib/postgresql/data/
+    networks:
+      - halcyon-internal
+    ports:
+      - "9432:5432"
+
+  # main application
+  app:
+    env_file:
+      .env
+    build:
+      dockerfile: dev/Dockerfile
+    command: bash -c "dev/start.sh"
+    environment:
+      ENVIRONMENT: "development"
+    depends_on:
+      - db
+    volumes:
+      - .:/app/
+    ports:
+      - "8000:8000"
+    networks:
+      - halcyon-internal
+      - halcyon-external

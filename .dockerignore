@@ -1,0 +1,21 @@
+# git
+.git
+
+# python internal and libraries
+__pycache__/
+.coverage
+
+# editors
+/.idea/
+/.vscode/
+
+# direnv
+.envrc
+
+# environments
+/.env
+venv/
+
+.*
+Dockerfile*
+README.md
