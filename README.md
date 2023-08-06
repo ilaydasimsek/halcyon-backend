@@ -4,12 +4,7 @@
 docker network create halcyon-external
 ```
 
-### 2. Install black
-```bash
-pip install black
-```
-
-### 3. Set env variables
+### 2. Set env variables
 ```bash
 cp .env.example .env
 ```
