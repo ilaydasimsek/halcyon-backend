@@ -9,6 +9,11 @@ docker network create halcyon-external
 pip install black
 ```
 
+### 3. Set env variables
+```bash
+cp .env.example .env
+```
+
 ## Development
 
 ### How to update packages

@@ -1,4 +1,6 @@
 Django
 dj-database-url
+graphene
+graphene-django
 python-dotenv
 psycopg2-binary

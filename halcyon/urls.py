@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-]
+from halcyon.graphql.main import graphql_view
+
+urlpatterns = [path("admin/", admin.site.urls), path("graphql", csrf_exempt(graphql_view))]
