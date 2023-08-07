@@ -21,3 +21,9 @@ pip-compile requirements.in && pip-compile requirements-dev.in
 pip install pre-commit
 pre-commit install
 ```
+
+### Run tests
+```bash
+# Run in the docker container
+./manage.py test
+```
