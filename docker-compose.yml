@@ -34,6 +34,7 @@ services:
       .env
     build:
       dockerfile: dev/Dockerfile
+      context: .
     command: bash -c "dev/start.sh"
     environment:
       ENVIRONMENT: "development"
