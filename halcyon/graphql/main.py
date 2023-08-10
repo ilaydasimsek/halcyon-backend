@@ -1,21 +1,26 @@
-import graphene
 from django.conf import settings
-from graphene import ObjectType, String, Schema
+from graphene import Schema
+from graphene_django.settings import GrapheneSettings
 from graphene_django.views import GraphQLView
 
-
-class TestNode(ObjectType):
-    first_name = String()
-    last_name = String()
-    full_name = String()
+import users.graphql.mutations
+import users.graphql.queries
 
 
-class Query(ObjectType):
-    test = graphene.Field(TestNode, first_name=String(required=True), last_name=String(default_value="unknown"))
-
-    def resolve_test(root, info, first_name, last_name):
-        return {"first_name": first_name, "last_name": last_name, "full_name": f"{first_name} {last_name}"}
+class Query(users.graphql.queries.Query):
+    pass
 
 
-schema = Schema(query=Query)
-graphql_view = GraphQLView.as_view(graphiql=settings.IS_DEV, schema=schema)
+class Mutation(users.graphql.mutations.Mutation):
+    pass
+
+
+schema = Schema(query=Query, mutation=Mutation)
+
+main_schema_settings = GrapheneSettings(
+    {
+        "SCHEMA": schema,
+        "MIDDLEWARE": ["graphql_jwt.middleware.JSONWebTokenMiddleware"],
+    },
+)
+graphql_view = GraphQLView.as_view(graphiql=settings.IS_DEV, schema=schema, middleware=main_schema_settings.MIDDLEWARE)
