@@ -1,4 +1,5 @@
 Django
+django-graphql-jwt
 dj-database-url
 graphene
 graphene-django

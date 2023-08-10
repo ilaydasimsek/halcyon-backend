@@ -20,12 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-+#bzc2j&5sa!_u$5+ifh98@v9ie^r76%67(0s547z&a=woz7^-"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 ENVIRONMENT = os.environ.get("ENVIRONMENT")
 IS_DEV = ENVIRONMENT == "development"
 ALLOWED_HOSTS = []
@@ -55,6 +51,18 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+GRAPHENE = {
+    "SCHEMA": "halcyon.graphql.main.schema",
+    "MIDDLEWARE": [
+        "graphql_jwt.middleware.JSONWebTokenMiddleware",
+    ],
+}
 
 ROOT_URLCONF = "halcyon.urls"
 
