@@ -17,10 +17,4 @@ class Mutation(users.graphql.mutations.Mutation):
 
 schema = Schema(query=Query, mutation=Mutation)
 
-main_schema_settings = GrapheneSettings(
-    {
-        "SCHEMA": schema,
-        "MIDDLEWARE": ["graphql_jwt.middleware.JSONWebTokenMiddleware"],
-    },
-)
-graphql_view = GraphQLView.as_view(graphiql=settings.IS_DEV, schema=schema, middleware=main_schema_settings.MIDDLEWARE)
+graphql_view = GraphQLView.as_view(graphiql=settings.IS_DEV)
