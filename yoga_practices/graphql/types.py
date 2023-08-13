@@ -10,7 +10,7 @@ class YogaPracticeNode(DjangoObjectType):
         fields = (
             "id",
             "title",
-            "descriptions",
+            "description",
             "benefits_description",
             "cover_image_url",
             "created_by",
