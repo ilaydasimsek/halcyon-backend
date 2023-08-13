@@ -18,7 +18,7 @@ class YogaPose(models.Model):
     description = models.TextField(blank=False, null=False)
 
     difficulty = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-    muscle_groups = models.ManyToManyField(MuscleGroup, null=True, blank=True)
+    muscle_groups = models.ManyToManyField(MuscleGroup, blank=True)
 
     audio_url = models.URLField(null=True, blank=True)
     image_url = models.URLField(null=True, blank=True)
