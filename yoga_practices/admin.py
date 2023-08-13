@@ -5,12 +5,12 @@ from yoga_practices.models import YogaPose, MuscleGroup, YogaPractice
 
 @admin.register(YogaPose)
 class YogaPoseAdmin(admin.ModelAdmin):
-    list_display = ["name", "sanskrit_name", "difficulty", "get_muscle_group_count"]
+    list_display = ["name", "sanskrit_name", "difficulty", "get_muscle_groups"]
     search_fields = ["name"]
 
-    @admin.display(description="# of muscle groups")
-    def get_muscle_group_count(self, obj: YogaPose):
-        return obj.muscle_groups.count()
+    @admin.display(description="Muscle groups")
+    def get_muscle_groups(self, obj: YogaPose):
+        return ", ".join(obj.muscle_groups.values_list("name", flat=True))
 
 
 @admin.register(MuscleGroup)
@@ -24,11 +24,11 @@ class YogaPracticePoseInline(admin.TabularInline):
 
 @admin.register(YogaPractice)
 class YogaPracticeAdmin(admin.ModelAdmin):
-    list_display = ["title", "get_poses", "created_by"]
+    list_display = ["title", "get_poses_count", "created_by"]
     ordering = ["-created_at"]
     search_fields = ["title"]
     inlines = [YogaPracticePoseInline]
 
-    @admin.display(description="Poses")
-    def get_poses(self, obj: YogaPractice):
-        return ", ".join(obj.yoga_poses.values_list("name", flat=True))
+    @admin.display(description="# of poses")
+    def get_poses_count(self, obj: YogaPractice):
+        return obj.yoga_poses.count()
