@@ -1,13 +1,13 @@
 from django.conf import settings
 from graphene import Schema
-from graphene_django.settings import GrapheneSettings
 from graphene_django.views import GraphQLView
 
 import users.graphql.mutations
 import users.graphql.queries
+import yoga_practices.graphql.queries
 
 
-class Query(users.graphql.queries.Query):
+class Query(users.graphql.queries.Query, yoga_practices.graphql.queries.Query):
     pass
 
 

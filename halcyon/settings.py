@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "graphene_django",
     # Local apps
     "users.apps.UsersConfig",
+    "yoga_practices.apps.YogaPracticesConfig",
 ]
 
 MIDDLEWARE = [
