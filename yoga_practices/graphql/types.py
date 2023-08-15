@@ -1,7 +1,27 @@
 from graphene import Connection
 from graphene_django import DjangoObjectType
 
-from yoga_practices.models import YogaPractice, YogaPose, MuscleGroup
+from yoga_practices.models import YogaPractice, YogaPose, MuscleGroup, YogaChallenge
+
+
+class YogaChallengeNode(DjangoObjectType):
+    class Meta:
+        model = YogaChallenge
+        fields = (
+            "id",
+            "title",
+            "description",
+            "benefits_description",
+            "cover_image_url",
+            "created_by",
+            "created_at",
+            "practices",
+        )
+
+
+class YogaChallengeConnection(Connection):
+    class Meta:
+        node = YogaChallengeNode
 
 
 class YogaPracticeNode(DjangoObjectType):
