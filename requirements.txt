@@ -16,6 +16,8 @@ django==4.2.4
     #   dj-database-url
     #   django-graphql-jwt
     #   graphene-django
+django-better-admin-arrayfield==1.4.2
+    # via -r requirements.in
 django-graphql-jwt==0.4.0
     # via -r requirements.in
 graphene==3.3

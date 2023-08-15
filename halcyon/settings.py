@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "graphene_django",
+    "django_better_admin_arrayfield",
     # Local apps
     "users.apps.UsersConfig",
     "yoga_practices.apps.YogaPracticesConfig",
