@@ -47,7 +47,17 @@ class YogaPracticeConnection(Connection):
 class YogaPoseNode(DjangoObjectType):
     class Meta:
         model = YogaPose
-        fields = ("id", "name", "sanskrit_name", "description", "difficulty", "muscle_groups", "audio_url", "image_url")
+        fields = (
+            "id",
+            "name",
+            "sanskrit_name",
+            "description",
+            "difficulty",
+            "muscle_groups",
+            "audio_url",
+            "image_url",
+            "chakras",
+        )
 
 
 class MuscleGroupNode(DjangoObjectType):
