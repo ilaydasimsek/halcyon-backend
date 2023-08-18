@@ -31,7 +31,7 @@ class YogaPracticePoseInline(admin.TabularInline):
 
 @admin.register(YogaPractice)
 class YogaPracticeAdmin(admin.ModelAdmin):
-    list_display = ["title", "get_poses_count", "created_by"]
+    list_display = ["title", "get_poses_count", "get_duration", "created_by"]
     ordering = ["-created_at"]
     search_fields = ["title"]
     inlines = [YogaPracticePoseInline]
@@ -39,6 +39,10 @@ class YogaPracticeAdmin(admin.ModelAdmin):
     @admin.display(description="# of poses")
     def get_poses_count(self, obj: YogaPractice):
         return obj.yoga_poses.count()
+
+    @admin.display(description="Duration (minutes)")
+    def get_duration(self, obj: YogaPractice):
+        return obj.duration // 60
 
 
 class YogaPracticeInline(admin.TabularInline):

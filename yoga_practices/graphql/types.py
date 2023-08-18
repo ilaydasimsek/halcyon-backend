@@ -1,3 +1,4 @@
+import graphene
 from graphene import Connection
 from graphene_django import DjangoObjectType
 
@@ -37,6 +38,8 @@ class YogaPracticeNode(DjangoObjectType):
             "created_at",
             "yoga_poses",
         )
+
+    duration = graphene.Int(description="total duration in seconds")
 
 
 class YogaPracticeConnection(Connection):

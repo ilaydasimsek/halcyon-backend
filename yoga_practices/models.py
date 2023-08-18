@@ -61,6 +61,8 @@ class YogaPose(models.Model):
     audio_url = models.URLField(null=True, blank=True)
     image_url = models.URLField(null=True, blank=True)
 
+    duration = models.IntegerField(validators=[MinValueValidator(1)], help_text="duration in seconds")
+
     def __str__(self):
         return f"Yoga Pose ({self.name})"
 
@@ -74,6 +76,10 @@ class YogaPractice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     yoga_poses = models.ManyToManyField(YogaPose, through="YogaPracticePose")
+
+    @property
+    def duration(self):
+        return self.yoga_poses.aggregate(models.Sum("duration")).get("duration__sum") or 0
 
     def __str__(self):
         return f"Yoga Practice ({self.title})"
