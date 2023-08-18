@@ -55,7 +55,6 @@ class YogaPose(models.Model):
     chakras = ArrayField(
         models.CharField(choices=Chakra.choices, max_length=64), blank=False, null=True, default=list, size=7
     )
-    styles = models.ManyToManyField(YogaStyle, blank=True)
     categories = models.ManyToManyField(YogaCategory, blank=True)
 
     audio_url = models.URLField(null=True, blank=True)
@@ -76,6 +75,7 @@ class YogaPractice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
 
     yoga_poses = models.ManyToManyField(YogaPose, through="YogaPracticePose")
+    style = models.ForeignKey(YogaStyle, on_delete=models.PROTECT)
 
     @property
     def duration(self):
