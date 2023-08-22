@@ -67,6 +67,9 @@ class YogaPose(models.Model):
 
 
 class YogaPractice(models.Model):
+    class Meta:
+        ordering = ["-created_at"]
+
     title = models.CharField(blank=False, null=False, max_length=255)
     description = models.TextField(blank=False, null=False)
     benefits_description = models.TextField(blank=False, null=False)

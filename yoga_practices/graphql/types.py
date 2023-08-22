@@ -2,7 +2,7 @@ import graphene
 from graphene import Connection, ObjectType
 from graphene_django import DjangoObjectType
 
-from yoga_practices.models import YogaPractice, YogaPose, MuscleGroup, YogaChallenge
+from yoga_practices.models import YogaPractice, YogaPose, MuscleGroup, YogaChallenge, YogaCategory
 
 
 class YogaChallengeNode(DjangoObjectType):
@@ -78,3 +78,14 @@ class MuscleGroupDistributionNode(ObjectType):
     id = graphene.String()
     name = graphene.String()
     count = graphene.Int()
+
+
+class YogaCategoryNode(DjangoObjectType):
+    class Meta:
+        model = YogaCategory
+        fields = ("id", "name", "description")
+
+
+class YogaCategoryConnection(Connection):
+    class Meta:
+        node = YogaCategoryNode
