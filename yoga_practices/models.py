@@ -39,7 +39,7 @@ class MuscleGroup(models.Model):
     class Meta:
         ordering = ["name"]
 
-    name = models.CharField(blank=False, null=False, max_length=255)
+    name = models.CharField(blank=False, null=False, max_length=255, unique=True)
 
     def __str__(self):
         return f"Muscle Group ({self.name})"
@@ -80,6 +80,19 @@ class YogaPractice(models.Model):
     @property
     def duration(self):
         return self.yoga_poses.aggregate(models.Sum("duration")).get("duration__sum") or 0
+
+    @property
+    def muscle_groups_distribution(self):
+        return (
+            self.yoga_poses.values("muscle_groups")
+            .annotate(
+                id=models.F("muscle_groups__id"),
+                name=models.F("muscle_groups__name"),
+                count=models.Count("muscle_groups"),
+            )
+            .values("id", "name", "count")
+            .order_by("-count")
+        )
 
     def __str__(self):
         return f"Yoga Practice ({self.title})"

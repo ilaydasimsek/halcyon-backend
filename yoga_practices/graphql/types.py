@@ -1,5 +1,5 @@
 import graphene
-from graphene import Connection
+from graphene import Connection, ObjectType
 from graphene_django import DjangoObjectType
 
 from yoga_practices.models import YogaPractice, YogaPose, MuscleGroup, YogaChallenge
@@ -40,6 +40,11 @@ class YogaPracticeNode(DjangoObjectType):
         )
 
     duration = graphene.Int(description="total duration in seconds")
+    muscle_groups_distribution = graphene.List("yoga_practices.graphql.types.MuscleGroupDistributionNode")
+    yoga_pose_count = graphene.Int(description="Total number of poses")
+
+    def resolve_yoga_pose_count(self: YogaPractice, info, **kwargs):
+        return self.yoga_poses.count()
 
 
 class YogaPracticeConnection(Connection):
@@ -67,3 +72,9 @@ class MuscleGroupNode(DjangoObjectType):
     class Meta:
         model = MuscleGroup
         fields = ("id", "name")
+
+
+class MuscleGroupDistributionNode(ObjectType):
+    id = graphene.String()
+    name = graphene.String()
+    count = graphene.Int()
