@@ -87,7 +87,8 @@ class YogaPractice(models.Model):
     @property
     def muscle_groups_distribution(self):
         return (
-            self.yoga_poses.values("muscle_groups")
+            self.yoga_poses.filter(muscle_groups__isnull=False)
+            .values("muscle_groups")
             .annotate(
                 id=models.F("muscle_groups__id"),
                 name=models.F("muscle_groups__name"),
