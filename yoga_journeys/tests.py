@@ -12,6 +12,29 @@ mutation completeYogaPractice($yogaPracticeId: Int!) {
 }
 """
 
+query_completed_yoga_practice = """
+query journey {
+  journey {
+    completedYogaPractices {
+      edges {
+        node {
+          yogaPractice {
+            id
+          }
+        }
+      }
+    }
+    uncompletedYogaPractices {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+  }
+}
+"""
+
 delete_completed_yoga_practice = """
 mutation deleteCompletedYogaPractice($yogaPracticeId: Int!) {
   deleteCompletedYogaPractice(yogaPracticeId: $yogaPracticeId){
@@ -53,6 +76,30 @@ class YogaJourneysAPITestCase(JSONWebTokenTestCase):
             self.assertTrue(response.data["completeYogaPractice"]["ok"])
 
         self.assertEqual(self.get_yoga_journey().completed_yoga_practices.filter(id=yoga_practice.id).count(), 10)
+
+    def test_completed_uncompleted_yoga_practices_query(self):
+        completed_practice_ids = []
+        uncompleted_practice_ids = []
+        for i in range(20):
+            yoga_practice = yoga_practice_factory()
+            if i % 2 == 0:
+                completed_practice_ids.append(yoga_practice.id)
+                self.client.execute(
+                    complete_yoga_practice,
+                    {"yogaPracticeId": yoga_practice.id},
+                )
+            else:
+                uncompleted_practice_ids.append(yoga_practice.id)
+        response = self.client.execute(query_completed_yoga_practice)
+        completed_ids_response = [
+            int(edge["node"]["yogaPractice"]["id"])
+            for edge in response.data["journey"]["completedYogaPractices"]["edges"]
+        ]
+        self.assertEqual(set(completed_ids_response), set(completed_practice_ids))
+        uncompleted_ids_response = [
+            int(edge["node"]["id"]) for edge in response.data["journey"]["uncompletedYogaPractices"]["edges"]
+        ]
+        self.assertEqual(set(uncompleted_ids_response), set(uncompleted_practice_ids))
 
     def test_completed_yoga_practice_deletion(self):
         yoga_practice = yoga_practice_factory()
