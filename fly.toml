@@ -5,7 +5,7 @@
 
 app = "halcyon-backend"
 primary_region = "cdg"
-console_command = "/code/manage.py shell"
+console_command = "/code/manage.py shell_plus"
 
 [build]
 

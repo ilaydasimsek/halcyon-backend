@@ -1,10 +1,11 @@
 Django
 django-better-admin-arrayfield
 django-graphql-jwt
+django-extensions
 dj-database-url
 graphene
 graphene-django
-gunicorn==20.1.0
+gunicorn
 python-dotenv
 psycopg2-binary
-whitenoise==6.2.0
+whitenoise
