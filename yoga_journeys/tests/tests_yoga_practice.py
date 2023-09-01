@@ -44,7 +44,7 @@ mutation deleteCompletedYogaPractice($yogaPracticeId: Int!) {
 """
 
 
-class YogaJourneysAPITestCase(JSONWebTokenTestCase):
+class YogaJourneysPracticeAPITestCase(JSONWebTokenTestCase):
     def setUp(self):
         self.user = user_factory()
         self.client.authenticate(self.user)
