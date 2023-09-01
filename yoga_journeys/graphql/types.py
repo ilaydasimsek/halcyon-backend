@@ -8,7 +8,7 @@ from yoga_practices.models import YogaPractice, YogaChallenge
 class ActiveYogaChallengeNode(DjangoObjectType):
     class Meta:
         model = JourneyActiveYogaChallenge
-        fields = ("yoga_challenge", "created_at", "completed_yoga_practices")
+        fields = ("yoga_challenge", "activated_at", "completed_yoga_practices")
 
 
 class CompletedYogaChallengeConnection(Connection):
