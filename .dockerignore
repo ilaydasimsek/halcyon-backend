@@ -6,6 +6,7 @@
 *.egg-info
 *.sql.gz
 .cache
+.coverage
 .project
 .idea
 .pydevproject
@@ -19,3 +20,11 @@ docs
 env
 logs
 deployment/Dockerfile
+README.md
+
+# direnv
+.envrc
+
+# environments
+/.env
+venv/
