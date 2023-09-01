@@ -1,13 +1,26 @@
-# git
-.git
-
-# python internal and libraries
-__pycache__/
+*.pyc
+*.pyo
+*.mo
+*.db
+*.css.map
+*.egg-info
+*.sql.gz
+.cache
 .coverage
-
-# editors
-/.idea/
-/.vscode/
+.project
+.idea
+.pydevproject
+.DS_Store
+.git/
+.sass-cache
+.vagrant/
+__pycache__
+dist
+docs
+env
+logs
+deployment/Dockerfile
+README.md
 
 # direnv
 .envrc
@@ -15,7 +28,3 @@ __pycache__/
 # environments
 /.env
 venv/
-
-.*
-Dockerfile*
-README.md

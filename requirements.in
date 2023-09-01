@@ -4,5 +4,7 @@ django-graphql-jwt
 dj-database-url
 graphene
 graphene-django
+gunicorn==20.1.0
 python-dotenv
 psycopg2-binary
+whitenoise==6.2.0

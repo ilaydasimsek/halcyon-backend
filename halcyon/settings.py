@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 import dj_database_url
 
@@ -26,6 +27,7 @@ SECRET_KEY = read_from_env("SECRET_KEY", str)
 ENVIRONMENT = read_from_env("ENVIRONMENT", str, required=True)
 IS_DEV = ENVIRONMENT == "development"
 ALLOWED_HOSTS = read_from_env("ALLOWED_HOSTS", list, default_value=[])
+CSRF_TRUSTED_ORIGINS = read_from_env("CSRF_TRUSTED_ORIGINS", list, default_value=[])
 
 if IS_DEV:
     DEBUG = read_from_env("DEBUG", bool, default_value=False)
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -127,6 +130,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
