@@ -27,3 +27,9 @@ pre-commit install
 # Run in the docker container
 ./manage.py test
 ```
+
+### How to deploy
+https://fly.io/docs/hands-on/install-flyctl/
+```bash
+flyctl deploy --dockerfile deployment/Dockerfile
+```
