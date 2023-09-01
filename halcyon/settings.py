@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 import dj_database_url
 
@@ -127,11 +128,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-import os
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(PROJECT_ROOT, "static")
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
