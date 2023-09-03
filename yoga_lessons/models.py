@@ -23,10 +23,6 @@ class YogaLesson(models.Model):
     def duration(self):
         return self.steps.aggregate(models.Sum("duration")).get("duration__sum") or 0
 
-    def clean(self):
-        if self.steps_count == 0:
-            raise ValidationError("Lessons should have at least one step")
-
 
 class YogaLessonStep(models.Model):
     class Meta:
