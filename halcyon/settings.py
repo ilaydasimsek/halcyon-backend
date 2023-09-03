@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "yoga_practices.apps.YogaPracticesConfig",
     "yoga_journeys.apps.YogaJourneysConfig",
+    "yoga_lessons.apps.YogaLessonsConfig",
 ]
 
 MIDDLEWARE = [

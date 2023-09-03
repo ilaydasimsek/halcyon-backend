@@ -4,12 +4,18 @@ from graphene_django.views import GraphQLView
 
 import users.graphql.mutations
 import users.graphql.queries
-import yoga_practices.graphql.queries
-import yoga_journeys.graphql.queries
 import yoga_journeys.graphql.mutations
+import yoga_journeys.graphql.queries
+import yoga_lessons.graphql.queries
+import yoga_practices.graphql.queries
 
 
-class Query(users.graphql.queries.Query, yoga_practices.graphql.queries.Query, yoga_journeys.graphql.queries.Query):
+class Query(
+    users.graphql.queries.Query,
+    yoga_practices.graphql.queries.Query,
+    yoga_journeys.graphql.queries.Query,
+    yoga_lessons.graphql.queries.Query,
+):
     pass
 
 
