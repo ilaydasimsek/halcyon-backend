@@ -1,7 +1,8 @@
 from graphql_jwt.testcases import JSONWebTokenTestCase
 
 from users.test.factory import user_factory
-from yoga_journeys.models import YogaJourney, JourneyActiveYogaChallenge
+from yoga_journeys.models import YogaJourney
+from yoga_practices.models import JourneyActiveYogaChallenge
 from yoga_practices.tests.yoga_practice_factory import yoga_practice_factory, yoga_challenge_factory
 
 start_yoga_challenge = """

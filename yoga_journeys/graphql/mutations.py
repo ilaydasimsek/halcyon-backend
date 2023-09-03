@@ -1,7 +1,8 @@
 import graphene
 from graphql_jwt.decorators import login_required
 
-from yoga_journeys.models import YogaJourney, JourneyCompletedYogaPractice
+from yoga_journeys.models import YogaJourney
+from yoga_practices.models import JourneyCompletedYogaPractice
 
 
 class CompleteYogaPractice(graphene.Mutation):

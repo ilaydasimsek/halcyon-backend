@@ -2,7 +2,15 @@ import graphene
 from graphene import Connection, ObjectType
 from graphene_django import DjangoObjectType
 
-from yoga_practices.models import YogaPractice, YogaPose, MuscleGroup, YogaChallenge, YogaCategory
+from yoga_practices.models import (
+    YogaPractice,
+    YogaPose,
+    MuscleGroup,
+    YogaChallenge,
+    YogaCategory,
+    JourneyCompletedYogaPractice,
+    JourneyActiveYogaChallenge,
+)
 
 
 class YogaChallengeNode(DjangoObjectType):
@@ -89,3 +97,25 @@ class YogaCategoryNode(DjangoObjectType):
 class YogaCategoryConnection(Connection):
     class Meta:
         node = YogaCategoryNode
+
+
+class CompletedYogaPracticeNode(DjangoObjectType):
+    class Meta:
+        model = JourneyCompletedYogaPractice
+        fields = ("yoga_practice", "created_at")
+
+
+class CompletedYogaPracticeConnection(Connection):
+    class Meta:
+        node = CompletedYogaPracticeNode
+
+
+class ActiveYogaChallengeNode(DjangoObjectType):
+    class Meta:
+        model = JourneyActiveYogaChallenge
+        fields = ("yoga_challenge", "activated_at", "completed_yoga_practices")
+
+
+class CompletedYogaChallengeConnection(Connection):
+    class Meta:
+        node = ActiveYogaChallengeNode

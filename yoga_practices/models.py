@@ -140,3 +140,23 @@ class YogaChallengePractice(models.Model):
 
     def __str__(self):
         return f"Challenge: {self.yoga_challenge.title} - (#{self.order}) Practice: {self.yoga_practice.title}"
+
+
+class JourneyCompletedYogaPractice(models.Model):
+    class Meta:
+        ordering = ["-created_at"]
+
+    yoga_practice = models.ForeignKey("yoga_practices.YogaPractice", on_delete=models.CASCADE)
+    yoga_journey = models.ForeignKey("yoga_journeys.YogaJourney", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+
+
+class JourneyActiveYogaChallenge(models.Model):
+    class Meta:
+        ordering = ["-activated_at"]
+        unique_together = ["yoga_challenge", "yoga_journey"]
+
+    yoga_challenge = models.ForeignKey("yoga_practices.YogaChallenge", on_delete=models.CASCADE)
+    yoga_journey = models.ForeignKey("yoga_journeys.YogaJourney", on_delete=models.CASCADE)
+    completed_yoga_practices = models.ManyToManyField("yoga_practices.YogaPractice")
+    activated_at = models.DateTimeField(auto_now_add=True, editable=False)
