@@ -66,8 +66,39 @@ class CompleteYogaChallengePractice(graphene.Mutation):
         return CompleteYogaChallengePractice(ok=True)
 
 
+class StartYogaLesson(graphene.Mutation):
+    class Arguments:
+        yoga_lesson_id = graphene.Int(required=True)
+
+    ok = graphene.Boolean()
+
+    @classmethod
+    @login_required
+    def mutate(cls, root, info, yoga_lesson_id):
+        yoga_journey, _ = YogaJourney.objects.get_or_create(user=info.context.user)
+        yoga_journey.start_yoga_lesson(yoga_lesson_id)
+        return StartYogaLesson(ok=True)
+
+
+class CompleteYogaLessonStep(graphene.Mutation):
+    class Arguments:
+        yoga_lesson_id = graphene.Int(required=True)
+        yoga_lesson_step_id = graphene.Int(required=True)
+
+    ok = graphene.Boolean()
+
+    @classmethod
+    @login_required
+    def mutate(cls, root, info, yoga_lesson_id, yoga_lesson_step_id):
+        yoga_journey, _ = YogaJourney.objects.get_or_create(user=info.context.user)
+        yoga_journey.complete_yoga_lesson_step(yoga_lesson_id=yoga_lesson_id, yoga_lesson_step_id=yoga_lesson_step_id)
+        return CompleteYogaLessonStep(ok=True)
+
+
 class Mutation(graphene.ObjectType):
     complete_yoga_practice = CompleteYogaPractice.Field()
     delete_completed_yoga_practice = DeleteCompletedYogaPractice.Field()
     start_yoga_challenge = StartYogaChallenge.Field()
     complete_yoga_challenge_practice = CompleteYogaChallengePractice.Field()
+    start_yoga_lesson = StartYogaLesson.Field()
+    complete_yoga_lesson_step = CompleteYogaLessonStep.Field()

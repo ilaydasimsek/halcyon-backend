@@ -2,6 +2,7 @@ from graphene import ConnectionField
 from graphene_django import DjangoObjectType
 
 from yoga_journeys.models import YogaJourney
+from yoga_lessons.models import JourneyActiveYogaLesson, YogaLesson
 from yoga_practices.models import YogaPractice, YogaChallenge, JourneyCompletedYogaPractice, JourneyActiveYogaChallenge
 
 
@@ -14,6 +15,8 @@ class YogaJourneyNode(DjangoObjectType):
     uncompleted_yoga_practices = ConnectionField("yoga_practices.graphql.types.YogaPracticeConnection")
     active_yoga_challenges = ConnectionField("yoga_practices.graphql.types.CompletedYogaChallengeConnection")
     inactive_yoga_challenges = ConnectionField("yoga_practices.graphql.types.YogaChallengeConnection")
+    active_yoga_lessons = ConnectionField("yoga_lessons.graphql.types.ActiveYogaLessonConnection")
+    inactive_yoga_lessons = ConnectionField("yoga_lessons.graphql.types.YogaLessonConnection")
 
     def resolve_completed_yoga_practices(self, info, *args, **kwargs):
         return JourneyCompletedYogaPractice.objects.filter(yoga_journey=self)
@@ -32,3 +35,10 @@ class YogaJourneyNode(DjangoObjectType):
             "yoga_challenge"
         )
         return YogaChallenge.objects.exclude(id__in=completed_challenges_query_set)
+
+    def resolve_active_yoga_lessons(self, info, *args, **kwargs):
+        return JourneyActiveYogaLesson.objects.filter(yoga_journey=self)
+
+    def resolve_inactive_yoga_lessons(self, info, *args, **kwargs):
+        completed_lessons_query_set = JourneyActiveYogaLesson.objects.filter(yoga_journey=self).values("yoga_lesson")
+        return YogaLesson.objects.exclude(id__in=completed_lessons_query_set)

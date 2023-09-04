@@ -36,3 +36,14 @@ class YogaLessonStep(models.Model):
     image_url = models.URLField(null=True, blank=True)
 
     order = models.PositiveSmallIntegerField(null=False, blank=False, default=0)
+
+
+class JourneyActiveYogaLesson(models.Model):
+    class Meta:
+        ordering = ["-created_at"]
+        unique_together = ["yoga_lesson", "yoga_journey"]
+
+    yoga_lesson = models.ForeignKey("yoga_lessons.YogaLesson", on_delete=models.CASCADE)
+    yoga_journey = models.ForeignKey("yoga_journeys.YogaJourney", on_delete=models.CASCADE)
+    completed_lesson_steps = models.ManyToManyField("yoga_lessons.YogaLessonStep")
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)

@@ -9,7 +9,7 @@ class YogaLessonStepInline(admin.TabularInline):
 
 @admin.register(YogaLesson)
 class YogaLessonAdmin(admin.ModelAdmin):
-    list_display = ["title", "steps_count", "get_duration"]
+    list_display = ["title", "steps_count", "get_duration", "priority"]
     search_fields = ["title"]
     inlines = [YogaLessonStepInline]
 
