@@ -37,6 +37,7 @@ class Query(graphene.ObjectType):
     def resolve_yoga_categories(self, info, **kwargs):
         return YogaCategory.objects.all()
 
+    @login_required
     def resolve_yoga_styles(self, info, **kwargs):
         return YogaStyle.objects.all()
 
