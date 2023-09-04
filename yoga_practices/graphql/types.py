@@ -10,6 +10,7 @@ from yoga_practices.models import (
     YogaCategory,
     JourneyCompletedYogaPractice,
     JourneyActiveYogaChallenge,
+    YogaStyle,
 )
 
 
@@ -45,6 +46,7 @@ class YogaPracticeNode(DjangoObjectType):
             "created_by",
             "created_at",
             "yoga_poses",
+            "style",
         )
 
     duration = graphene.Int(description="total duration in seconds")
@@ -97,6 +99,17 @@ class YogaCategoryNode(DjangoObjectType):
 class YogaCategoryConnection(Connection):
     class Meta:
         node = YogaCategoryNode
+
+
+class YogaStyleNode(DjangoObjectType):
+    class Meta:
+        model = YogaStyle
+        fields = ("id", "name", "description")
+
+
+class YogaStyleConnection(Connection):
+    class Meta:
+        node = YogaStyleNode
 
 
 class CompletedYogaPracticeNode(DjangoObjectType):
