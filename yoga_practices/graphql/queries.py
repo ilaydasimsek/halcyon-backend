@@ -6,6 +6,7 @@ from yoga_practices.graphql.types import (
     YogaPracticeConnection,
     YogaChallengeConnection,
     YogaPracticeNode,
+    YogaChallengeNode,
     YogaCategoryConnection,
     YogaStyleConnection,
 )
@@ -20,6 +21,7 @@ class Query(graphene.ObjectType):
     yoga_styles = ConnectionField(YogaStyleConnection)
 
     yoga_practice = graphene.Field(YogaPracticeNode, id=graphene.Int(required=True))
+    yoga_challenge = graphene.Field(YogaChallengeNode, id=graphene.Int(required=True))
 
     @login_required
     def resolve_yoga_practices(self, info, **kwargs):
@@ -44,3 +46,7 @@ class Query(graphene.ObjectType):
     @login_required
     def resolve_yoga_practice(self, info, id):
         return YogaPractice.objects.get(id=id)
+
+    @login_required
+    def resolve_yoga_challenge(self, info, id):
+        return YogaChallenge.objects.get(id=id)
