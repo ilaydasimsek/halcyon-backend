@@ -28,6 +28,15 @@ class YogaChallengeNode(DjangoObjectType):
             "practices",
         )
 
+    active_yoga_challenge = graphene.Field("yoga_practices.graphql.types.ActiveYogaChallengeNode")
+
+    def resolve_active_yoga_challenge(self: YogaChallenge, info, *args, **kwargs):
+        user = info.context.user
+        try:
+            return JourneyActiveYogaChallenge.objects.get(yoga_journey__user=user, yoga_challenge=self)
+        except JourneyActiveYogaChallenge.DoesNotExist:
+            return None
+
 
 class YogaChallengeConnection(Connection):
     class Meta:
