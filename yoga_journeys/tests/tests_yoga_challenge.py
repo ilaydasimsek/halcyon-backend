@@ -1,4 +1,6 @@
+from django.test.utils import CaptureQueriesContext
 from graphql_jwt.testcases import JSONWebTokenTestCase
+from django.db import connection
 
 from users.test.factory import user_factory
 from yoga_journeys.models import YogaJourney
@@ -18,6 +20,21 @@ complete_yoga_challenge_practice = """
 mutation completeYogaChallengePractice($yogaPracticeId: Int!, $yogaChallengeId: Int!) {
   completeYogaChallengePractice(yogaPracticeId: $yogaPracticeId, yogaChallengeId: $yogaChallengeId){
     ok
+  }
+}
+"""
+
+query_yoga_challenges = """
+query yogaChallenges {
+  yogaChallenges {
+    edges {
+      node {
+        title
+        activeYogaChallenge {
+          activatedAt
+        }
+      }
+    }
   }
 }
 """
@@ -66,3 +83,16 @@ class YogaJourneysPracticeAPITestCase(JSONWebTokenTestCase):
         self.assertTrue(practices[0].id in completed_practice_ids)
         self.assertTrue(practices[1].id not in completed_practice_ids)
         self.assertTrue(yoga_practice_factory().id not in completed_practice_ids)
+
+    def test_yoga_challenges_db_hit_count(self):
+        yoga_challenges = [yoga_challenge_factory(title=f"fake-challenge-{i}") for i in range(30)]
+        for i in range(len(yoga_challenges)):
+            if i % 2 == 0:
+                self.client.execute(
+                    start_yoga_challenge,
+                    {"yogaChallengeId": yoga_challenges[i].id},
+                )
+        with CaptureQueriesContext(connection) as context:
+            self.client.execute(query_yoga_challenges)
+            # DB queries are for: 1. User, 2. Yoga Challenges, 3. Attached active yoga challenges
+            self.assertEqual(len(context.captured_queries), 3)

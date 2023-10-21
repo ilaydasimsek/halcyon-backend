@@ -33,7 +33,7 @@ class Query(graphene.ObjectType):
 
     @login_required
     def resolve_yoga_challenges(self, info, **kwargs):
-        return YogaChallenge.objects.all()
+        return YogaChallenge.objects.related_active_challenges(user=info.context.user).all()
 
     @login_required
     def resolve_yoga_categories(self, info, **kwargs):
