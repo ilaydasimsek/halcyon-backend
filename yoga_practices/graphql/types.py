@@ -1,4 +1,5 @@
 import graphene
+import logging
 from graphene import Connection, ObjectType
 from graphene_django import DjangoObjectType
 
@@ -12,6 +13,8 @@ from yoga_practices.models import (
     JourneyActiveYogaChallenge,
     YogaStyle,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class YogaChallengeNode(DjangoObjectType):
@@ -27,6 +30,17 @@ class YogaChallengeNode(DjangoObjectType):
             "created_at",
             "practices",
         )
+
+    active_yoga_challenge = graphene.Field("yoga_practices.graphql.types.ActiveYogaChallengeNode")
+
+    def resolve_active_yoga_challenge(self: YogaChallenge, info, *args, **kwargs):
+        if hasattr(self, "user_active_challenges"):
+            user_active_challenges = self.user_active_challenges
+            if len(user_active_challenges):
+                return user_active_challenges[0]
+        else:
+            logger.warning("user_active_challenges field was not prefetched in yoga challenges query.")
+        return None
 
 
 class YogaChallengeConnection(Connection):

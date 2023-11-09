@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Prefetch
 from django_better_admin_arrayfield.models.fields import ArrayField
 
 
@@ -115,7 +116,20 @@ class YogaPracticePose(models.Model):
         return f"Practice: {self.yoga_practice.title} - (#{self.order}) Pose: {self.yoga_pose.name}"
 
 
+class YogaChallengeManager(models.Manager):
+    def related_active_challenges(self, user):
+        return self.prefetch_related(
+            Prefetch(
+                "active_yoga_challenges",
+                queryset=JourneyActiveYogaChallenge.objects.filter(yoga_journey__user=user),
+                to_attr="user_active_challenges",
+            )
+        )
+
+
 class YogaChallenge(models.Model):
+    objects = YogaChallengeManager()
+
     title = models.CharField(blank=False, null=False, max_length=255)
     description = models.TextField(blank=False, null=False)
     benefits_description = models.TextField(blank=False, null=False)
@@ -156,7 +170,9 @@ class JourneyActiveYogaChallenge(models.Model):
         ordering = ["-activated_at"]
         unique_together = ["yoga_challenge", "yoga_journey"]
 
-    yoga_challenge = models.ForeignKey("yoga_practices.YogaChallenge", on_delete=models.CASCADE)
+    yoga_challenge = models.ForeignKey(
+        "yoga_practices.YogaChallenge", on_delete=models.CASCADE, related_name="active_yoga_challenges"
+    )
     yoga_journey = models.ForeignKey("yoga_journeys.YogaJourney", on_delete=models.CASCADE)
     completed_yoga_practices = models.ManyToManyField("yoga_practices.YogaPractice")
     activated_at = models.DateTimeField(auto_now_add=True, editable=False)
