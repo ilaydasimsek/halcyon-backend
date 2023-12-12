@@ -49,4 +49,4 @@ class Query(graphene.ObjectType):
 
     @login_required
     def resolve_yoga_challenge(self, info, id):
-        return YogaChallenge.objects.get(id=id)
+        return YogaChallenge.objects.related_active_challenges(user=info.context.user).get(id=id)
