@@ -28,6 +28,12 @@ pre-commit install
 ./manage.py test
 ```
 
+### Populate test data
+```bash
+# Run in the docker container
+./manage.py populate_test_data
+```
+
 ### How to deploy
 https://fly.io/docs/hands-on/install-flyctl/
 ```bash

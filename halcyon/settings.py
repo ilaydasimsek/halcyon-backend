@@ -31,6 +31,9 @@ CSRF_TRUSTED_ORIGINS = read_from_env("CSRF_TRUSTED_ORIGINS", list, default_value
 
 if IS_DEV:
     DEBUG = read_from_env("DEBUG", bool, default_value=False)
+    import logging
+
+    logging.basicConfig(level=logging.INFO)
 else:
     DEBUG = False
 # Application definition
