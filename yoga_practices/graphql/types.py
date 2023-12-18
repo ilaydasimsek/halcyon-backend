@@ -12,6 +12,7 @@ from yoga_practices.models import (
     JourneyCompletedYogaPractice,
     JourneyActiveYogaChallenge,
     YogaStyle,
+    YogaChallengePractice,
 )
 
 logger = logging.getLogger(__name__)
@@ -28,10 +29,10 @@ class YogaChallengeNode(DjangoObjectType):
             "cover_image_url",
             "created_by",
             "created_at",
-            "practices",
         )
 
     active_yoga_challenge = graphene.Field("yoga_practices.graphql.types.ActiveYogaChallengeNode")
+    practices = graphene.List("yoga_practices.graphql.types.YogaPracticeNode")
 
     def resolve_active_yoga_challenge(self: YogaChallenge, info, *args, **kwargs):
         if hasattr(self, "user_active_challenges"):
@@ -41,6 +42,12 @@ class YogaChallengeNode(DjangoObjectType):
         else:
             logger.warning("user_active_challenges field was not prefetched in yoga challenges query.")
         return None
+
+    def resolve_practices(self: YogaChallenge, info, *args, **kwargs):
+        yoga_challenge_practices = YogaChallengePractice.objects.filter(yoga_challenge=self).prefetch_related(
+            "yoga_practice"
+        )
+        return [object.yoga_practice for object in yoga_challenge_practices]
 
 
 class YogaChallengeConnection(Connection):
