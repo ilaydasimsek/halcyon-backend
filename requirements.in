@@ -2,6 +2,8 @@ Django
 django-better-admin-arrayfield
 django-graphql-jwt
 django-extensions
+django-json-widget
+django-pydantic-field
 dj-database-url
 graphene
 graphene-django
