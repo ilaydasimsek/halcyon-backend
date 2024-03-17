@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "yoga_lessons.apps.YogaLessonsConfig",
     "articles.apps.ArticlesConfig",
     "django_json_widget",
+    "polymorphic",
 ]
 
 MIDDLEWARE = [

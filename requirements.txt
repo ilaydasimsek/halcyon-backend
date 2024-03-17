@@ -18,6 +18,7 @@ django==4.2.4
     #   dj-database-url
     #   django-extensions
     #   django-graphql-jwt
+    #   django-polymorphic
     #   django-pydantic-field
     #   graphene-django
 django-better-admin-arrayfield==1.4.2
@@ -27,6 +28,8 @@ django-extensions==3.2.3
 django-graphql-jwt==0.4.0
     # via -r requirements.in
 django-json-widget==1.1.1
+    # via -r requirements.in
+django-polymorphic==3.1.0
     # via -r requirements.in
 django-pydantic-field==0.3.3
     # via -r requirements.in

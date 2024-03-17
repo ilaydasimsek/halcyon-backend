@@ -3,6 +3,7 @@ django-better-admin-arrayfield
 django-graphql-jwt
 django-extensions
 django-json-widget
+django-polymorphic
 django-pydantic-field
 dj-database-url
 graphene
