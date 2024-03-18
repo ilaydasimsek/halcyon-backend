@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     "yoga_practices.apps.YogaPracticesConfig",
     "yoga_journeys.apps.YogaJourneysConfig",
     "yoga_lessons.apps.YogaLessonsConfig",
+    "articles.apps.ArticlesConfig",
+    "django_json_widget",
+    "polymorphic",
 ]
 
 MIDDLEWARE = [
@@ -136,8 +139,6 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

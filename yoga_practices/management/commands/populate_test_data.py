@@ -4,8 +4,8 @@ from django.core.management import BaseCommand
 from django.conf import settings
 from django.db import IntegrityError
 
-from yoga_lessons.models import YogaLessonStep
-from yoga_practices.models import Chakra
+from articles.models import Article
+from yoga_practices.models import Chakra, YogaPractice
 
 logger = logging.getLogger(__name__)
 
@@ -129,8 +129,27 @@ def populate_yoga_challenges():
             logger.info(f"Populated Yoga Challenge ({title})")
 
 
+def populate_articles():
+    from articles.models import ArticleContentItems, ArticleImageContentItem, ArticleTextContentItem
+
+    for i in range(1, 6):
+        title = f"Article #{i}"
+        if Article.objects.filter(title=title).exists():
+            continue
+        Article.objects.create(
+            title=title,
+            content_items=ArticleContentItems(
+                items=[
+                    ArticleImageContentItem(type="image", image_url="https://picsum.photos/400/200"),
+                    ArticleTextContentItem(type="text", content="Some Example Content"),
+                    ArticleTextContentItem(type="text", content="Some More Example Content"),
+                ]
+            ),
+        )
+
+
 def populate_yoga_lessons():
-    from yoga_lessons.models import YogaLesson
+    from yoga_lessons.models import YogaLesson, YogaLessonArticleStep, YogaLessonPracticeStep
 
     for i in range(1, 6):
         title = f"Yoga lesson #{i}"
@@ -143,16 +162,15 @@ def populate_yoga_lessons():
             priority=i % 3,
         )
         for order in range(i + 1):
-            yoga_lesson.steps.add(
-                YogaLessonStep.objects.create(
-                    yoga_lesson=yoga_lesson,
-                    title=f"Step #{order + 1}",
-                    duration=20 + i + order,
-                    audio_url="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg",
-                    image_url="https://picsum.photos/200/400",
-                    order=order,
+            if (i + order) % 3 == 0:
+                YogaLessonArticleStep.objects.create(
+                    yoga_lesson=yoga_lesson, order=order, article=Article.objects.all()[i - 1]
                 )
-            )
+            else:
+                YogaLessonPracticeStep.objects.create(
+                    yoga_lesson=yoga_lesson, order=order, yoga_practice=YogaPractice.objects.all()[i - 1]
+                )
+
         logger.info(f"Populated Yoga Lesson ({title})")
 
 
@@ -168,4 +186,5 @@ class Command(BaseCommand):
         populate_yoga_poses()
         populate_yoga_practices()
         populate_yoga_challenges()
+        populate_articles()
         populate_yoga_lessons()
