@@ -2,13 +2,16 @@ import graphene
 from graphene import Connection
 from graphene_django import DjangoObjectType
 
+from articles.graphql.types import ArticleNode
 from yoga_lessons.models import YogaLesson, JourneyActiveYogaLesson, YogaLessonArticleStep, YogaLessonPracticeStep
 
 
 class YogaLessonArticleStepNode(DjangoObjectType):
     class Meta:
         model = YogaLessonArticleStep
-        fields = ("id",)  # TODO: Add more fields
+        fields = ("id", "article")
+
+    article = graphene.Field(ArticleNode)
 
 
 class YogaLessonPracticeStepNode(DjangoObjectType):
