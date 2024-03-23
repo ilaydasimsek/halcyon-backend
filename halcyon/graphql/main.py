@@ -8,6 +8,7 @@ import yoga_journeys.graphql.mutations
 import yoga_journeys.graphql.queries
 import yoga_lessons.graphql.queries
 import yoga_practices.graphql.queries
+import articles.graphql.queries
 
 
 class Query(
@@ -15,6 +16,7 @@ class Query(
     yoga_practices.graphql.queries.Query,
     yoga_journeys.graphql.queries.Query,
     yoga_lessons.graphql.queries.Query,
+    articles.graphql.queries.Query,
 ):
     pass
 
