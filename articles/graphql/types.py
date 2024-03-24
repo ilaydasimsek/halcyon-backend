@@ -1,6 +1,7 @@
 import logging
 
 import graphene
+from graphene import Connection
 from graphene_django import DjangoObjectType
 
 from articles.models import Article, ArticleImageContentItem, ArticleTextContentItem, ArticleContentItems
@@ -35,9 +36,14 @@ class ArticleContentItemNode(graphene.Union):
 class ArticleNode(DjangoObjectType):
     class Meta:
         model = Article
-        fields = ("id", "title")
+        fields = ("id", "title", "is_pinned")
 
     content_items = graphene.List(ArticleContentItemNode)
 
     def resolve_content_items(self: ArticleContentItems, *args, **kwargs):
         return self.content_items.items
+
+
+class ArticleConnection(Connection):
+    class Meta:
+        node = ArticleNode

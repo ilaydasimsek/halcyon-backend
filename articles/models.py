@@ -22,8 +22,12 @@ class ArticleContentItems(pydantic.BaseModel):
 
 
 class Article(models.Model):
-    title = models.CharField(blank=False, null=False, max_length=255)
+    class Meta:
+        ordering = ["-is_pinned"]
+
+    title = models.CharField(unique=True, blank=False, null=False, max_length=255)
     content_items: ArticleContentItems = SchemaField(schema=ArticleContentItems, default=ArticleContentItems(items=[]))
+    is_pinned = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Article({self.id}) - {self.title}"

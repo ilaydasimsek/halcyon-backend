@@ -7,6 +7,7 @@ from articles.models import Article
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ["id", "title"]
+    list_display = ["id", "title", "is_pinned"]
     search_fields = ["title"]
+    list_filter = ["is_pinned"]
     formfield_overrides = {models.JSONField: {"widget": JSONEditorWidget}}
