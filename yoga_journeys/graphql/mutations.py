@@ -7,7 +7,7 @@ from yoga_practices.models import JourneyCompletedYogaPractice
 
 class CompleteYogaPractice(graphene.Mutation):
     class Arguments:
-        yoga_practice_id = graphene.Int(required=True)
+        yoga_practice_id = graphene.String(required=True)
 
     ok = graphene.Boolean()
 
@@ -21,7 +21,7 @@ class CompleteYogaPractice(graphene.Mutation):
 
 class DeleteCompletedYogaPractice(graphene.Mutation):
     class Arguments:
-        yoga_practice_id = graphene.Int(required=True)
+        yoga_practice_id = graphene.String(required=True)
 
     count = graphene.Int()
 
@@ -37,7 +37,7 @@ class DeleteCompletedYogaPractice(graphene.Mutation):
 
 class StartYogaChallenge(graphene.Mutation):
     class Arguments:
-        yoga_challenge_id = graphene.Int(required=True)
+        yoga_challenge_id = graphene.String(required=True)
 
     ok = graphene.Boolean()
 
@@ -51,8 +51,8 @@ class StartYogaChallenge(graphene.Mutation):
 
 class CompleteYogaChallengePractice(graphene.Mutation):
     class Arguments:
-        yoga_challenge_id = graphene.Int(required=True)
-        yoga_practice_id = graphene.Int(required=True)
+        yoga_challenge_id = graphene.String(required=True)
+        yoga_practice_id = graphene.String(required=True)
 
     ok = graphene.Boolean()
 
@@ -68,7 +68,7 @@ class CompleteYogaChallengePractice(graphene.Mutation):
 
 class StartYogaLesson(graphene.Mutation):
     class Arguments:
-        yoga_lesson_id = graphene.Int(required=True)
+        yoga_lesson_id = graphene.String(required=True)
 
     ok = graphene.Boolean()
 
@@ -82,8 +82,8 @@ class StartYogaLesson(graphene.Mutation):
 
 class CompleteYogaLessonStep(graphene.Mutation):
     class Arguments:
-        yoga_lesson_id = graphene.Int(required=True)
-        yoga_lesson_step_id = graphene.Int(required=True)
+        yoga_lesson_id = graphene.String(required=True)
+        yoga_lesson_step_id = graphene.String(required=True)
 
     ok = graphene.Boolean()
 

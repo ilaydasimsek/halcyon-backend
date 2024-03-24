@@ -8,7 +8,7 @@ from yoga_lessons.models import YogaLesson
 
 class Query(graphene.ObjectType):
     yoga_lessons = ConnectionField(YogaLessonConnection)
-    yoga_lesson = graphene.Field(YogaLessonNode, id=graphene.Int(required=True))
+    yoga_lesson = graphene.Field(YogaLessonNode, id=graphene.String(required=True))
 
     @login_required
     def resolve_yoga_lessons(self, info, **kwargs):

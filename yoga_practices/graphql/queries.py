@@ -15,13 +15,13 @@ from django.db import models
 
 
 class Query(graphene.ObjectType):
-    yoga_practices = ConnectionField(YogaPracticeConnection, style_id=graphene.Int(required=False))
+    yoga_practices = ConnectionField(YogaPracticeConnection, style_id=graphene.String(required=False))
     yoga_challenges = ConnectionField(YogaChallengeConnection)
     yoga_categories = ConnectionField(YogaCategoryConnection)
     yoga_styles = ConnectionField(YogaStyleConnection)
 
-    yoga_practice = graphene.Field(YogaPracticeNode, id=graphene.Int(required=True))
-    yoga_challenge = graphene.Field(YogaChallengeNode, id=graphene.Int(required=True))
+    yoga_practice = graphene.Field(YogaPracticeNode, id=graphene.String(required=True))
+    yoga_challenge = graphene.Field(YogaChallengeNode, id=graphene.String(required=True))
 
     @login_required
     def resolve_yoga_practices(self, info, **kwargs):

@@ -7,7 +7,7 @@ from articles.models import Article
 
 
 class Query(graphene.ObjectType):
-    article = graphene.Field(ArticleNode, id=graphene.Int(required=True))
+    article = graphene.Field(ArticleNode, id=graphene.String(required=True))
     articles = ConnectionField(ArticleConnection)
 
     @login_required
