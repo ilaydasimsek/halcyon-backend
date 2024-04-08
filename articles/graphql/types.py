@@ -4,7 +4,13 @@ import graphene
 from graphene import Connection
 from graphene_django import DjangoObjectType
 
-from articles.models import Article, ArticleImageContentItem, ArticleTextContentItem, ArticleContentItems
+from articles.models import (
+    Article,
+    ArticleImageContentItem,
+    ArticleTextContentItem,
+    ArticleContentItems,
+    ArticleHeaderContentItem,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -17,11 +23,18 @@ class ArticleTextContentItemNode(graphene.ObjectType):
     content = graphene.String(required=True)
 
 
+class ArticleHeaderContentItemNode(graphene.ObjectType):
+    title = graphene.String(required=True)
+    subtitle = graphene.String(required=False)
+    image_url = graphene.String(required=False)
+
+
 class ArticleContentItemNode(graphene.Union):
     class Meta:
         types = (
             ArticleImageContentItemNode,
             ArticleTextContentItemNode,
+            ArticleHeaderContentItemNode,
         )
 
     @classmethod
@@ -30,6 +43,8 @@ class ArticleContentItemNode(graphene.Union):
             return ArticleImageContentItemNode
         elif isinstance(instance, ArticleTextContentItem):
             return ArticleTextContentItemNode
+        elif isinstance(instance, ArticleHeaderContentItem):
+            return ArticleHeaderContentItemNode
         logger.warning("Unknown type in ArticleContentItemNode", extra={"instance": instance})
 
 

@@ -11,21 +11,40 @@ class ArticleTestCase(TestCase):
             [{"type": "text", "content": "some content"}],
             [{"type": "image", "image_url": "https://www.fakedomain.com"}],
             [{"type": "text", "content": "some content"}, {"type": "image", "image_url": "https://www.fakedomain.com"}],
+            [{"type": "header", "title": "header title"}, {"type": "image", "image_url": "https://www.fakedomain.com"}],
         ]
         # Assert -- Shouldn't raise exceptions
-        for items in inputs:
-            Article.objects.create(title="Fake Article Title", content_items={"items": items})
+        for index, items in enumerate(inputs):
+            Article.objects.create(title=f"Fake Article Title {index}", content_items={"items": items})
 
     def test_article_content_schema_errors(self):
         invalid_inputs = [
             [{"type": "text"}],  # No content,
             [{"type": "image"}],  # No image_url,
             [{"content": "some content"}],  # No type,
-            [{"image_url": "some content"}],  # No image_url,
+            [{"type": "header"}],  # No title,
+            [{"type": "text", "content": "x", "extra_field": 1}],  # Extra content,
             [{"type": "text", "content": "some content"}, {"image_url": "some content"}],
             # One valid, one invalid element
         ]
 
-        for items in invalid_inputs:
+        for index, items in enumerate(invalid_inputs):
             with self.assertRaises(ValidationError):
-                Article.objects.create(title="Fake Article Title", content_items={"items": items})
+                Article.objects.create(title=f"Fake Article Title {index}", content_items={"items": items})
+
+    def test_article_header_content_item(self):
+        items = [
+            {
+                "type": "header",
+                "title": "some title",
+                "subtitle": "some subtitle",
+                "image_url": "https://www.fakedomain.com",
+            },
+            {"type": "text", "content": "some text"},
+        ]
+        # Assert -- header item with no errors
+        Article.objects.create(title="Fake Article Title", content_items={"items": items})
+
+        # Assert -- multiple header items
+        with self.assertRaises(ValidationError):
+            Article.objects.create(title=f"Fake Article Title 2", content_items={"items": [items[0], items[0]]})
