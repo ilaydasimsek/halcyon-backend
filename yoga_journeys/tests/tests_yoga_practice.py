@@ -5,7 +5,7 @@ from yoga_journeys.models import YogaJourney
 from yoga_practices.tests.yoga_practice_factory import yoga_practice_factory
 
 complete_yoga_practice = """
-mutation completeYogaPractice($yogaPracticeId: Int!) {
+mutation completeYogaPractice($yogaPracticeId: String!) {
   completeYogaPractice(yogaPracticeId: $yogaPracticeId){
     ok
   }
@@ -36,7 +36,7 @@ query journey {
 """
 
 delete_completed_yoga_practice = """
-mutation deleteCompletedYogaPractice($yogaPracticeId: Int!) {
+mutation deleteCompletedYogaPractice($yogaPracticeId: String!) {
   deleteCompletedYogaPractice(yogaPracticeId: $yogaPracticeId){
     count
   }
@@ -58,7 +58,7 @@ class YogaJourneysPracticeAPITestCase(JSONWebTokenTestCase):
 
         response = self.client.execute(
             complete_yoga_practice,
-            {"yogaPracticeId": yoga_practice.id},
+            {"yogaPracticeId": str(yoga_practice.id)},
         )
 
         self.assertTrue(response.data["completeYogaPractice"]["ok"])
@@ -70,7 +70,7 @@ class YogaJourneysPracticeAPITestCase(JSONWebTokenTestCase):
         for i in range(10):
             response = self.client.execute(
                 complete_yoga_practice,
-                {"yogaPracticeId": yoga_practice.id},
+                {"yogaPracticeId": str(yoga_practice.id)},
             )
 
             self.assertTrue(response.data["completeYogaPractice"]["ok"])
@@ -83,21 +83,20 @@ class YogaJourneysPracticeAPITestCase(JSONWebTokenTestCase):
         for i in range(20):
             yoga_practice = yoga_practice_factory()
             if i % 2 == 0:
-                completed_practice_ids.append(yoga_practice.id)
+                completed_practice_ids.append(str(yoga_practice.id))
                 self.client.execute(
                     complete_yoga_practice,
-                    {"yogaPracticeId": yoga_practice.id},
+                    {"yogaPracticeId": str(yoga_practice.id)},
                 )
             else:
-                uncompleted_practice_ids.append(yoga_practice.id)
+                uncompleted_practice_ids.append(str(yoga_practice.id))
         response = self.client.execute(query_completed_yoga_practice)
         completed_ids_response = [
-            int(edge["node"]["yogaPractice"]["id"])
-            for edge in response.data["journey"]["completedYogaPractices"]["edges"]
+            edge["node"]["yogaPractice"]["id"] for edge in response.data["journey"]["completedYogaPractices"]["edges"]
         ]
         self.assertEqual(set(completed_ids_response), set(completed_practice_ids))
         uncompleted_ids_response = [
-            int(edge["node"]["id"]) for edge in response.data["journey"]["uncompletedYogaPractices"]["edges"]
+            edge["node"]["id"] for edge in response.data["journey"]["uncompletedYogaPractices"]["edges"]
         ]
         self.assertEqual(set(uncompleted_ids_response), set(uncompleted_practice_ids))
 
@@ -107,13 +106,13 @@ class YogaJourneysPracticeAPITestCase(JSONWebTokenTestCase):
         yoga_journey.completed_yoga_practices.add(yoga_practice)
         response = self.client.execute(
             delete_completed_yoga_practice,
-            {"yogaPracticeId": yoga_practice.id},
+            {"yogaPracticeId": str(yoga_practice.id)},
         )
         self.assertEqual(response.data["deleteCompletedYogaPractice"]["count"], 1)
 
     def test_non_existing_yoga_practice_deletion(self):
         response = self.client.execute(
             delete_completed_yoga_practice,
-            {"yogaPracticeId": -1},
+            {"yogaPracticeId": "-1"},
         )
         self.assertEqual(response.data["deleteCompletedYogaPractice"]["count"], 0)

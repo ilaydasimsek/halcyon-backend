@@ -8,7 +8,7 @@ from yoga_practices.models import JourneyActiveYogaChallenge
 from yoga_practices.tests.yoga_practice_factory import yoga_practice_factory, yoga_challenge_factory
 
 start_yoga_challenge = """
-mutation startYogaChallenge($yogaChallengeId: Int!) {
+mutation startYogaChallenge($yogaChallengeId: String!) {
   startYogaChallenge(yogaChallengeId: $yogaChallengeId){
     ok
   }
@@ -17,7 +17,7 @@ mutation startYogaChallenge($yogaChallengeId: Int!) {
 
 
 complete_yoga_challenge_practice = """
-mutation completeYogaChallengePractice($yogaPracticeId: Int!, $yogaChallengeId: Int!) {
+mutation completeYogaChallengePractice($yogaPracticeId: String!, $yogaChallengeId: String!) {
   completeYogaChallengePractice(yogaPracticeId: $yogaPracticeId, yogaChallengeId: $yogaChallengeId){
     ok
   }
@@ -54,7 +54,7 @@ class YogaJourneysPracticeAPITestCase(JSONWebTokenTestCase):
 
         response = self.client.execute(
             start_yoga_challenge,
-            {"yogaChallengeId": yoga_challenge.id},
+            {"yogaChallengeId": str(yoga_challenge.id)},
         )
 
         self.assertTrue(response.data["startYogaChallenge"]["ok"])
@@ -64,14 +64,14 @@ class YogaJourneysPracticeAPITestCase(JSONWebTokenTestCase):
         yoga_challenge = yoga_challenge_factory(yoga_practice_count=2)
         self.client.execute(
             start_yoga_challenge,
-            {"yogaChallengeId": yoga_challenge.id},
+            {"yogaChallengeId": str(yoga_challenge.id)},
         )
 
         practices = list(yoga_challenge.practices.all())
 
         response = self.client.execute(
             complete_yoga_challenge_practice,
-            {"yogaChallengeId": yoga_challenge.id, "yogaPracticeId": practices[0].id},
+            {"yogaChallengeId": str(yoga_challenge.id), "yogaPracticeId": str(practices[0].id)},
         )
 
         self.assertTrue(response.data["completeYogaChallengePractice"]["ok"])
@@ -90,7 +90,7 @@ class YogaJourneysPracticeAPITestCase(JSONWebTokenTestCase):
             if i % 2 == 0:
                 self.client.execute(
                     start_yoga_challenge,
-                    {"yogaChallengeId": yoga_challenges[i].id},
+                    {"yogaChallengeId": str(yoga_challenges[i].id)},
                 )
         with CaptureQueriesContext(connection) as context:
             self.client.execute(query_yoga_challenges)
