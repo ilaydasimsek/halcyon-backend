@@ -1,14 +1,28 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Prefetch
 from polymorphic.models import PolymorphicModel
 
 from articles.models import Article
 from yoga_practices.models import YogaPractice
 
 
+class YogaLessonManager(models.Manager):
+    def with_related_active_lessons(self, user):
+        return self.prefetch_related(
+            Prefetch(
+                "active_yoga_lessons",
+                queryset=JourneyActiveYogaLesson.objects.filter(yoga_journey__user=user),
+                to_attr="user_active_lessons",
+            )
+        )
+
+
 class YogaLesson(models.Model):
     class Meta:
         ordering = ["-priority"]
+
+    objects = YogaLessonManager()
 
     title = models.CharField(blank=False, null=False, max_length=255)
     description = models.TextField(blank=False, null=False)
@@ -44,7 +58,9 @@ class JourneyActiveYogaLesson(models.Model):
         ordering = ["-created_at"]
         unique_together = ["yoga_lesson", "yoga_journey"]
 
-    yoga_lesson = models.ForeignKey("yoga_lessons.YogaLesson", on_delete=models.CASCADE)
+    yoga_lesson = models.ForeignKey(
+        "yoga_lessons.YogaLesson", on_delete=models.CASCADE, related_name="active_yoga_lessons"
+    )
     yoga_journey = models.ForeignKey("yoga_journeys.YogaJourney", on_delete=models.CASCADE)
     completed_lesson_steps = models.ManyToManyField("yoga_lessons.YogaLessonStep")
     created_at = models.DateTimeField(auto_now_add=True, editable=False)

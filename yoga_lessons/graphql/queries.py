@@ -12,8 +12,8 @@ class Query(graphene.ObjectType):
 
     @login_required
     def resolve_yoga_lessons(self, info, **kwargs):
-        return YogaLesson.objects.all()
+        return YogaLesson.objects.with_related_active_lessons(user=info.context.user).all()
 
     @login_required
     def resolve_yoga_lesson(self, info, id, **kwargs):
-        return YogaLesson.objects.get(id=id)
+        return YogaLesson.objects.with_related_active_lessons(user=info.context.user).get(id=id)
