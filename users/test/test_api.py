@@ -6,7 +6,13 @@ from django.utils import timezone
 from freezegun import freeze_time
 from graphql_jwt.testcases import JSONWebTokenTestCase
 
+from users.models import User
 from users.test.factory import user_factory
+from yoga_journeys.models import YogaJourney
+from yoga_lessons.models import JourneyActiveYogaLesson
+from yoga_lessons.tests.factory import yoga_lesson_factory
+from yoga_practices.models import JourneyActiveYogaChallenge, JourneyCompletedYogaPractice
+from yoga_practices.tests.yoga_practice_factory import yoga_challenge_factory, yoga_practice_factory
 
 login_mutation = """
 mutation login($email: String!, $password: String!) {
@@ -21,6 +27,14 @@ refresh_token_mutation = """
 mutation refresh($token: String!) {
   refreshToken(token: $token) {
     payload
+  }
+}
+"""
+
+delete_account_mutation = """
+mutation deleteAccount {
+  deleteAccount {
+    ok
   }
 }
 """
@@ -89,3 +103,26 @@ class AuthAPITestCase(JSONWebTokenTestCase):
         self.assertEqual(
             response.data["refreshToken"]["payload"]["email"], self.user.email, "JWT token should be decoded properly."
         )
+
+    def test_delete_account(self):
+        journey = YogaJourney.objects.create(user=self.user)
+        self.assertTrue(YogaJourney.objects.filter(user=self.user).exists())
+
+        journey.start_yoga_lesson(yoga_lesson_id=yoga_lesson_factory().id)
+        self.assertTrue(JourneyActiveYogaLesson.objects.filter(yoga_journey__user=self.user).exists())
+
+        journey.start_yoga_challenge(yoga_challenge_id=yoga_challenge_factory().id)
+        self.assertTrue(JourneyActiveYogaChallenge.objects.filter(yoga_journey__user=self.user).exists())
+
+        journey.complete_yoga_practice(yoga_practice_id=yoga_practice_factory().id)
+        self.assertTrue(JourneyCompletedYogaPractice.objects.filter(yoga_journey__user=self.user).exists())
+
+        user_id = self.user.id
+        response = self.client.execute(delete_account_mutation)
+        self.assertTrue(response.data["deleteAccount"]["ok"])
+
+        self.assertFalse(User.objects.filter(id=user_id).exists())
+        self.assertFalse(YogaJourney.objects.filter(user_id=user_id).exists())
+        self.assertFalse(JourneyActiveYogaLesson.objects.filter(yoga_journey__user_id=user_id).exists())
+        self.assertFalse(JourneyActiveYogaChallenge.objects.filter(yoga_journey__user_id=user_id).exists())
+        self.assertFalse(JourneyCompletedYogaPractice.objects.filter(yoga_journey__user_id=user_id).exists())

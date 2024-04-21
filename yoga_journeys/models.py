@@ -5,7 +5,7 @@ from yoga_practices.models import JourneyCompletedYogaPractice, JourneyActiveYog
 
 
 class YogaJourney(models.Model):
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE, unique=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     completed_yoga_practices = models.ManyToManyField(
         "yoga_practices.YogaPractice", through="yoga_practices.JourneyCompletedYogaPractice", blank=True
