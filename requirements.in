@@ -11,4 +11,5 @@ graphene-django
 gunicorn
 python-dotenv
 psycopg2-binary
+sendgrid
 whitenoise

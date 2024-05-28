@@ -67,10 +67,16 @@ pyjwt==2.8.0
     # via django-graphql-jwt
 python-dotenv==1.0.0
     # via -r requirements.in
+python-http-client==3.3.7
+    # via sendgrid
+sendgrid==6.11.0
+    # via -r requirements.in
 six==1.16.0
     # via promise
 sqlparse==0.4.4
     # via django
+starkbank-ecdsa==2.2.0
+    # via sendgrid
 text-unidecode==1.3
     # via graphene-django
 typing-extensions==4.7.1
