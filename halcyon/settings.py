@@ -28,6 +28,11 @@ ENVIRONMENT = read_from_env("ENVIRONMENT", str, required=True)
 IS_DEV = ENVIRONMENT == "development"
 ALLOWED_HOSTS = read_from_env("ALLOWED_HOSTS", list, default_value=[])
 CSRF_TRUSTED_ORIGINS = read_from_env("CSRF_TRUSTED_ORIGINS", list, default_value=[])
+SENDGRID = {
+    "API_KEY": read_from_env("SENDGRID_API_KEY", required=True),
+    "TEMPLATE_ID": read_from_env("SENDGRID_TEMPLATE_ID", required=True),
+}
+
 
 if IS_DEV:
     DEBUG = read_from_env("DEBUG", bool, default_value=False)
