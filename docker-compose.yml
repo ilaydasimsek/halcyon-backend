@@ -28,6 +28,15 @@ services:
     ports:
       - "9432:5432"
 
+  es:
+    image: elasticsearch:7.8.1
+    environment:
+      - discovery.type=single-node
+    networks:
+      - halcyon-internal
+    ports:
+      - "9200:9200"
+
   # main application
   app:
     env_file:
@@ -40,6 +49,7 @@ services:
       ENVIRONMENT: "development"
     depends_on:
       - db
+      - es
     volumes:
       - .:/app/
     ports:

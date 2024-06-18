@@ -1,6 +1,8 @@
 Django
 django-better-admin-arrayfield
 django-graphql-jwt
+django_elasticsearch_dsl
+elasticsearch-dsl>=7.0.0,<8.0.0
 django-extensions
 django-json-widget
 django-polymorphic
