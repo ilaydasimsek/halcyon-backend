@@ -53,14 +53,15 @@ INSTALLED_APPS = [
     "graphene_django",
     "django_better_admin_arrayfield",
     "django_extensions",
+    "django_elasticsearch_dsl",
+    "django_json_widget",
+    "polymorphic",
     # Local apps
     "users.apps.UsersConfig",
     "yoga_practices.apps.YogaPracticesConfig",
     "yoga_journeys.apps.YogaJourneysConfig",
     "yoga_lessons.apps.YogaLessonsConfig",
     "articles.apps.ArticlesConfig",
-    "django_json_widget",
-    "polymorphic",
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,9 @@ STATIC_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': read_from_env("ELASTICSEARCH_DSL_HOSTS", required=True),
+    }
+}
